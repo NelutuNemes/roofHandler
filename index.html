@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+      <div class="container">
+        <h1>Calculator Suprafață Acoperiș</h1>
+        
+        <p>Știți suprafața totală?</p>
+        <button id="know-total">Da</button>
+        <button id="dont-know-total">Nu</button>
+
+        <div id="total-area-input" class="hidden">
+            <label for="total-area">Introduceți suprafața totală (m²):</label>
+            <input type="number" id="total-area">
+            <button id="confirm-total-area">Confirmă</button>
+        </div>
+
+        <div id="shape-selection" class="hidden">
+            <label for="shape-select">Alegeți forma:</label>
+            <select id="shape-select">
+                <option value="">Selectați</option>
+                <option  data-value="Rectangle">Dreptunghiulara</option>
+                <option  data-value="Triangle">Triunghiulara</option>
+                <option  data-value="Circle">Cerc</option>
+                <option  data-value="Trapezoid">Trapezoidala</option>
+            </select>
+        </div>
+        
+        <div id="form-element"></div>
+
+        <ul id="record-list"></ul>
+
+        <h2>Suprafață totală:</h2>
+        <p id="total-surface-area">0 m²</p>
+    </div>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
