@@ -8,16 +8,17 @@ let log = (message) => {
 };
 log("Debug is active!");
 
-// 🔹 Stocare date globale
+// Stocare date globale
 let totalArea = 0;
 let areaRecords = [];
 let inputValues = [];
+let observerActive = false;
 
 log(`Total area is: ${totalArea}`);
 log(`Area records: ${JSON.stringify(areaRecords)}`);
 log(`Input values: ${JSON.stringify(inputValues)}`);
 
-// 🔹 Elemente DOM
+// Elemente DOM
 const knowTotalBtn = document.getElementById("know-total");
 const dontKnowTotalBtn = document.getElementById("dont-know-total");
 const formElement =document.getElementById("form-element");
@@ -28,8 +29,10 @@ const shapeSelect = document.getElementById("shape-select");
 const shapeSelection = document.getElementById("shape-selection");
 const recordList = document.getElementById("record-list");
 const totalSurfaceArea = document.getElementById("total-surface-area");
+const totalSurfaceConfirmBtn = document.getElementById("total-surface-confirm");
+const userInterogateElement =document.getElementById("user-interogate")
 
-// 🔹 Obiect cu formulele pentru fiecare formă geometrică
+// Obiect cu formulele pentru fiecare formă geometrică
 const areaFormulas = {
     Rectangle: (length, width) => length * width,
     Triangle: (base, height) => 0.5 * base * height,
@@ -37,7 +40,7 @@ const areaFormulas = {
     Trapezoid: (sideA, sideB, height) => 0.5 * (sideA + sideB) * height,
 };
 
-// 🔹 Obiect cu numărul de inputuri necesare pentru fiecare formă
+// Obiect cu numărul de inputuri necesare pentru fiecare formă
 const shapeInputs = {
     Rectangle: ["Lungime", "Lățime"],
     Triangle: ["Bază", "Înălțime"],
@@ -45,7 +48,7 @@ const shapeInputs = {
     Trapezoid: ["Latura mică", "Latura mare", "Înălțime"]
 };
 
-// 🔹 Butoane pentru utilizator
+// Butoane pentru utilizator
 knowTotalBtn.addEventListener("click", () => {
     totalAreaInput.classList.remove("hidden");
     shapeSelection.classList.add("hidden");
@@ -54,21 +57,30 @@ knowTotalBtn.addEventListener("click", () => {
 dontKnowTotalBtn.addEventListener("click", () => {
     shapeSelection.classList.remove("hidden");
     totalAreaInput.classList.add("hidden");
+     userInterogateElement.classList.add("hidden");
+
 });
 
-// 🔹 Confirmarea suprafeței totale
+// Confirmarea suprafeței totale
 confirmTotalBtn.addEventListener("click", () => {
     let area = parseFloat(totalAreaField.value);
     if (!isNaN(area) && area > 0) {
         totalArea = area;
         totalSurfaceArea.textContent = `${totalArea} m²`;
         log(`Confirmed total area: ${totalArea}`);
+
+
     } else {
         alert("Introduceți o suprafață validă!");
     }
+
+    if (totalArea > 0) {
+        totalSurfaceConfirmBtn.classList.remove("hidden");
+        userInterogateElement.classList.add("hidden");
+    }
 });
 
-// 🔹 Generarea formularului pentru forma selectată
+// Generarea formularului pentru forma selectată
 shapeSelect.addEventListener("change", () => {
 
 
@@ -99,7 +111,7 @@ shapeSelect.addEventListener("change", () => {
 
 });
 
-// 🔹 Creează inputuri dinamice în funcție de forma selectată
+// Creează inputuri dinamice în funcție de forma selectată
 function generateShapeForm(shape, container) {
     let inputFields = [];
     shapeInputs[shape].forEach((labelText) => {
@@ -118,7 +130,7 @@ function generateShapeForm(shape, container) {
     return inputFields;
 }
 
-// 🔹 Extrage valorile din inputuri și le salvează global
+// Extrage valorile din inputuri și le salvează global
 function getInputValues(inputFields) {
     inputValues.length = 0; // Șterge datele anterioare
     inputFields.forEach(input => inputValues.push(parseFloat(input.value) || 0));
@@ -126,8 +138,8 @@ function getInputValues(inputFields) {
     log(`Extracted input values: ${JSON.stringify(inputValues)}`);
 }
 
-// 🔹 Adaugă o nouă înregistrare și actualizează aria totală
-// 🔹 Generarea formularului pentru forma selectată
+//  Adaugă o nouă înregistrare și actualizează aria totală
+//  Generarea formularului pentru forma selectată
 shapeSelect.addEventListener("change", () => {
     let selectedShape = shapeSelect.options[shapeSelect.selectedIndex].getAttribute("data-value");
     if (!selectedShape) return;
@@ -157,7 +169,7 @@ shapeSelect.addEventListener("change", () => {
     formElement.appendChild(newForm);
 });
 
-// 🔹 Adaugă o nouă înregistrare și actualizează aria totală
+//  Adaugă o nouă înregistrare și actualizează aria totală
 function addRecord(shape, inputFields) {
     getInputValues(inputFields);
 
@@ -177,11 +189,15 @@ function addRecord(shape, inputFields) {
     inputFields.forEach(input => (input.value = ""));
     // Resetează elementul select
     shapeSelect.value = "";
+     totalSurfaceConfirmBtn.classList.remove("hidden");
+
 }
     
 
-// 🔹 Actualizează suprafața totală și adaugă înregistrarea în listă
+//  Actualizează suprafața totală și adaugă înregistrarea în listă
 function updateTotalArea(area, shape) {
+
+    log(`Start list element length is: ${areaRecords.length}`)
 
     let valuesText = inputValues.map(value => `${value}m`).join(" x ");
 
@@ -189,11 +205,87 @@ function updateTotalArea(area, shape) {
     li.className = "record";
     li.textContent = `${shape} (${valuesText}) :   ${area.toFixed(2)} m²`;
     recordList.appendChild(li);
-
+    observerActive = true;//activate observer after first record added
     totalArea += area;
     totalSurfaceArea.textContent = totalArea.toFixed(2) + " m²";
 
     log(`Updated total area: ${totalArea}`);
+
+    tileResult.textContent = "";
+
+    // MutationObserver pentru a reactualiza numărul de țigle
+const observer = new MutationObserver(() => {
+    if (observerActive) {
+        log("List updated. Recalculating tiles...");
+        calculateTileNumber();
+    }
+});
+observer.observe(recordList, { childList: true });
+    
+
 }
+
+//calcul necesar tigle
+
+totalSurfaceConfirmBtn.addEventListener("click", () => {
+    tileSelection.classList.remove("hidden");
+})
+
+const tileModel = {
+    Selectati: " ",
+    Francia: ["10", "buc/m²"], // 10 țigle pe metru pătrat
+    Marsilia: ["16", "buc/m²"], // 16 țigle pe metru pătrat
+    Valahia: ["18", "buc/m²"], // 18 țigle pe metru pătrat
+    Solzi: ["18", "buc/m²"] // 18 țigle pe metru pătrat
+};
+
+const tileSelect = document.getElementById("tile-select");
+const calculateTilesBtn = document.getElementById("calculate-tiles");
+const tileResult = document.getElementById("tile-result");
+
+
+// Populează selectorul cu modelele de țigle
+for (const [model, details] of Object.entries(tileModel)) {
+
+    const option = document.createElement("option");
+
+    if (model === "Selectati") {
+        option.value = "";
+        option.textContent="Selectati :"
+    } else {
+        option.value = details[0]; // Numărul de țigle pe metru pătrat
+        option.textContent = `${model} (${details[0]} ${details[1]})`; // Afișează modelul și numărul de țigle
+    }
+    
+    tileSelect.appendChild(option);
+}
+
+// Ascunde/afișează selectorul de țigle în funcție de suprafața totală
+const tileSelection = document.getElementById("tile-selection");
+if (totalArea > 0) {
+    log(`Current total area is: ${totalArea}`);
+    tileSelection.classList.remove("hidden");
+    tileSelection.classList.add("isVisible");
+}
+
+
+// Calculează numărul de țigle necesare
+calculateTilesBtn.addEventListener("click", calculateTileNumber);
+    function calculateTileNumber(){
+    const tilesPerSquareMeter = parseFloat(tileSelect.value); // Numărul de țigle pe metru pătrat
+    if (isNaN(tilesPerSquareMeter)) {
+        alert("Selectați un model de țiglă!");
+        return;
+    }
+
+    if (totalArea <= 0) {
+        alert("Suprafața totală trebuie să fie mai mare decât 0!");
+        return;
+    }
+
+    // Calculează numărul de țigle necesare
+    const numberOfTiles = Math.ceil(totalArea * tilesPerSquareMeter); // Rotunjim în sus
+    tileResult.textContent = `Numărul de țigle necesare: ${numberOfTiles} bucăți`;
+};
 
 
