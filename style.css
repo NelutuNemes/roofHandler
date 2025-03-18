@@ -4,15 +4,14 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /* background-color: #f5f5f5; */
-    background-image: url("resources/images/portuguesTile.jpg");
+
 }
 
 .container {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(13, 13, 13, 0.1);
     width: 400px;
     text-align: center;
 }
@@ -42,6 +41,13 @@ input {
     margin: 5px;
     text-align: center;
 }
+select{
+    font-size: 0.9rem;
+    /* width: fit-content; */
+}
+option{
+    font-size: 0.9rem;
+}
 
 #record-list {
     list-style-type: none;
@@ -64,4 +70,13 @@ input {
 .isVisible{
     display: flex !important;
     visibility: visible !important;
+}
+.withBackgroundImage{
+    background-image: url("resources/images/portuguesTile.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.noBackgroundImage{
+    background-color: #e6e4e4;
 }
