@@ -6,6 +6,15 @@ body {
     height: 100vh;
 
 }
+h1{
+    width: 90%;
+    /* background: lightblue; */
+    text-align: right;
+    font-size: 1.2rem;
+    border-bottom: 1px solid black;
+    margin: auto;
+    margin-bottom: 1rem;
+}
 
 .container {
     background: white;
@@ -54,7 +63,7 @@ option{
     padding: 0;
 }
 
-.record {
+.record,#tile-result, #price-result {
     background: #e8f4ff;
     padding: 10px;
     border-radius: 5px;
@@ -62,6 +71,24 @@ option{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+#tile-selection{
+  border: 1px solid lightgray;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+#price-block{
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+
+}
+#price-title, #tile-selection label{
+    font-weight: bolder;
+    font-size: 1rem;
 }
 .hidden{
     display: none;

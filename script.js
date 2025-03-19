@@ -10,6 +10,7 @@ log("Debug is active!");
 
 // Stocare date globale
 let totalArea = 0;
+let numberOfTiles = 0;
 let areaRecords = [];
 let inputValues = [];
 
@@ -18,6 +19,7 @@ log(`Area records: ${JSON.stringify(areaRecords)}`);
 log(`Input values: ${JSON.stringify(inputValues)}`);
 
 // Elemente DOM
+const question = document.getElementById("question");
 const knowTotalBtn = document.getElementById("know-total");
 const dontKnowTotalBtn = document.getElementById("dont-know-total");
 const formElement = document.getElementById("form-element");
@@ -30,6 +32,9 @@ const recordList = document.getElementById("record-list");
 const totalSurfaceArea = document.getElementById("total-surface-area");
 const totalSurfaceConfirmBtn = document.getElementById("total-surface-confirm");
 const userInterogateElement = document.getElementById("user-interogate");
+const priceBlock = document.getElementById("price-block");
+const priceInput = document.getElementById("price-input");
+const priceResult = document.getElementById("price-result");
 
 // Add background image
 document.body.classList.add("withBackgroundImage");
@@ -54,6 +59,9 @@ const shapeInputs = {
 knowTotalBtn.addEventListener("click", () => {
     totalAreaInput.classList.remove("hidden");
     shapeSelection.classList.add("hidden");
+    question.classList.add("hidden");
+    knowTotalBtn.classList.add("hidden");
+    dontKnowTotalBtn.classList.add("hidden");
     document.body.classList.remove("withBackgroundImage");
     document.body.classList.add("noBackgroundImage");
 });
@@ -94,6 +102,10 @@ function generateShapeForm(shape, container) {
         input.className = "shape-input";
         input.placeholder = `${labelText} (m)`;
         input.required = true;
+
+        input.setAttribute("inputmode", "decimal");
+        input.setAttribute("pattern", "[0-9]+(\\.[0-9]+)?");
+
         inputFields.push(input);
 
         container.appendChild(document.createTextNode(labelText + "  : "));
@@ -231,7 +243,32 @@ function calculateTileNumber() {
         return;
     }
 
-    const numberOfTiles = Math.ceil(totalArea * tilesPerSquareMeter);
+    numberOfTiles = Math.ceil(totalArea * tilesPerSquareMeter);
     tileResult.textContent = `Numărul de țigle necesare: ${numberOfTiles} bucăți`;
+    if (numberOfTiles > 0) {
+        priceBlock.classList.remove("hidden");
+    }
 }
 
+
+function getPrice() {
+        let priceValue = priceInput.value.trim().replace(",", "."); // Înlocuiește virgula cu punct
+        let currentPrice = parseFloat(priceValue);
+
+        log(`Price value: ${currentPrice}`);
+
+        if (!isNaN(currentPrice) && currentPrice > 0) {
+            calculatePrice(currentPrice);
+        } else {
+            alert("Invalid price! Please insert a valid number!");
+            log("Invalid price! Please insert a valid number!");
+        }
+    }
+
+    function calculatePrice(currentPrice) {
+        let estimatedPrice = currentPrice * numberOfTiles;
+        log(`Estimated price is: ${estimatedPrice}`);
+        priceResult.textContent = `Prețul estimat este: ${estimatedPrice} RON.`;
+    }
+
+priceInput.addEventListener("input", getPrice);
