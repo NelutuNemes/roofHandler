@@ -13,6 +13,7 @@ let totalArea = 0;
 let numberOfTiles = 0;
 let areaRecords = [];
 let inputValues = [];
+let recordCounter = 0;
 
 log(`Total area is: ${totalArea}`);
 log(`Area records: ${JSON.stringify(areaRecords)}`);
@@ -25,6 +26,7 @@ const dontKnowTotalBtn = document.getElementById("dont-know-total");
 const formElement = document.getElementById("form-element");
 const totalAreaInput = document.getElementById("total-area-input");
 const totalAreaField = document.getElementById("total-area");
+let areaResult = document.getElementById("area-result");
 const confirmTotalBtn = document.getElementById("confirm-total-area");
 const shapeSelect = document.getElementById("shape-select");
 const shapeSelection = document.getElementById("shape-selection");
@@ -35,6 +37,7 @@ const userInterogateElement = document.getElementById("user-interogate");
 const priceBlock = document.getElementById("price-block");
 const priceInput = document.getElementById("price-input");
 const priceResult = document.getElementById("price-result");
+let footer = document.getElementById("footer");
 
 // Add background image
 document.body.classList.add("withBackgroundImage");
@@ -64,6 +67,8 @@ knowTotalBtn.addEventListener("click", () => {
     dontKnowTotalBtn.classList.add("hidden");
     document.body.classList.remove("withBackgroundImage");
     document.body.classList.add("noBackgroundImage");
+    areaResult.classList.remove("hidden");
+    footer.classList.add("black-color");
 });
 
 dontKnowTotalBtn.addEventListener("click", () => {
@@ -72,6 +77,9 @@ dontKnowTotalBtn.addEventListener("click", () => {
     userInterogateElement.classList.add("hidden");
     document.body.classList.remove("withBackgroundImage");
     document.body.classList.add("noBackgroundImage");
+    areaResult.classList.remove("hidden");
+    footer.classList.add("black-color");
+
 });
 
 // Confirmarea suprafeței totale
@@ -79,7 +87,7 @@ confirmTotalBtn.addEventListener("click", () => {
     let area = parseFloat(totalAreaField.value);
     if (!isNaN(area) && area > 0) {
         totalArea = area;
-        totalSurfaceArea.textContent = `${totalArea} m²`;
+        totalSurfaceArea.textContent = `${totalArea.toFixed(2)} m²`;
         log(`Confirmed total area: ${totalArea}`);
 
         if (totalArea > 0) {
@@ -171,13 +179,30 @@ function addRecord(shape, inputFields) {
 
 // Actualizează suprafața totală și adaugă înregistrarea în listă
 function updateTotalArea(area, shape) {
-    log(`Start list element length is: ${areaRecords.length}`)
+
+    recordCounter++;
+    log(`Current record counter is: ${recordCounter}`);
+    
+    let currentLabel = "";
+    log(`Current shape is : ${shape}`)
+    if (shape === "Rectangle") {
+        currentLabel="dreptunghiulara"
+    } else if (shape === "Triangle") {
+        currentLabel="triunghiulara"
+    }else if (shape === "Circle") {
+        currentLabel="circulara"
+    }else if (shape === "Trapezoid") {
+        currentLabel="trapezoidala"
+    }
+
+    log(`Current form selected: is ${currentLabel}`);
 
     let valuesText = inputValues.map(value => `${value}m`).join(" x ");
 
     let li = document.createElement("li");
     li.className = "record";
-    li.textContent = `${shape} (${valuesText}) :   ${area.toFixed(2)} m²`;
+    li.setAttribute( "id", "record");
+    li.textContent = `${recordCounter}. Suprafata ${currentLabel} (${valuesText}) :   ${area.toFixed(2)} m²`;
     recordList.appendChild(li);
 
     totalArea += area;
@@ -186,6 +211,8 @@ function updateTotalArea(area, shape) {
     log(`Updated total area: ${totalArea}`);
 
     tileResult.textContent = "";
+    priceInput.value = "";
+    priceResult.textContent =""
 }
 
 // Calcul necesar tigle
@@ -198,7 +225,7 @@ const tileModel = {
     Francia: ["10", "buc/m²"],
     Marsilia: ["16", "buc/m²"],
     Valahia: ["18", "buc/m²"],
-    Solzi: ["18", "buc/m²"]
+    Solzi: ["21", "buc/m²"]
 };
 
 const tileSelect = document.getElementById("tile-select");
@@ -268,7 +295,18 @@ function getPrice() {
     function calculatePrice(currentPrice) {
         let estimatedPrice = currentPrice * numberOfTiles;
         log(`Estimated price is: ${estimatedPrice}`);
-        priceResult.textContent = `Prețul estimat este: ${estimatedPrice} RON.`;
+
+        let locale = "ro-RO";
+        let currency ="RON"
+
+
+        let formattedPrice = new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency: currency
+    }).format(estimatedPrice);
+
+
+        priceResult.textContent = `Prețul estimat este : ${formattedPrice} .`;
     }
 
 priceInput.addEventListener("input", getPrice);

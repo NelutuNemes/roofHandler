@@ -4,6 +4,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    /* display: flex;
+    flex-direction: column; */
 
 }
 h1{
@@ -15,6 +17,9 @@ h1{
     margin: auto;
     margin-bottom: 1rem;
 }
+h5{
+    margin: 0;
+}
 
 .container {
     background: white;
@@ -22,6 +27,8 @@ h1{
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(13, 13, 13, 0.1);
     width: 400px;
+    max-height: 83vh;
+    overflow-y: auto;
     text-align: center;
 }
 
@@ -63,7 +70,7 @@ option{
     padding: 0;
 }
 
-.record,#tile-result, #price-result {
+.record, #tile-result, #price-result {
     background: #e8f4ff;
     padding: 10px;
     border-radius: 5px;
@@ -71,6 +78,31 @@ option{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#record {
+    background: #e8f4ff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+    font-size: 0.9rem;
+}
+.area-result{
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 0.2rem;
+    height: fit-content;
+    margin-bottom: 0.5rem;
+}
+#total-surface-area{
+    padding: 0.4rem;
+    font-weight: bold;
+    width: fit-content;
+    margin: auto;
 }
 #tile-selection{
   border: 1px solid lightgray;
@@ -90,6 +122,9 @@ option{
     font-weight: bolder;
     font-size: 1rem;
 }
+#price-result{
+    font-weight: bolder;
+}
 .hidden{
     display: none;
     /* visibility: hidden; */
@@ -106,4 +141,29 @@ option{
 }
 .noBackgroundImage{
     background-color: #e6e4e4;
+    background-color: #f5f5f5;
+}
+
+footer{
+    /* background-color: rgb(187, 181, 181); */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0.2rem;
+    /* word-wrap: break-word;
+    overflow-wrap: break-word; */
+    bottom: 2px;
+    /* border: 1px solid black; */
+    position: fixed;
+}
+footer p{
+    font-size: 0.7rem;
+    margin: 0;
+    text-align: center;
+}
+.black-color{
+    color: black;
 }

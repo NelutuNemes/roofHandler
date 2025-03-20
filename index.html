@@ -6,8 +6,10 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
+
 <body>
-      <div class="container">
+    <div class="container">
         <h1>roofMetrics</h1>
         
         <div id="user-interogate">
@@ -39,9 +41,11 @@
         <div id="form-element"></div>
 
         <ul id="record-list"></ul>
-
-        <h4>Suprafață totală:</h4>
-        <p id="total-surface-area">0 m²</p>
+        
+        <div class="area-result hidden" id="area-result" >
+            <h5>Suprafață totală:</h5>
+            <p id="total-surface-area">0.00 m²</p>
+        </div>
 
         <button id="total-surface-confirm" class="hidden">Confirmati suprafata totala</button>
 
@@ -55,11 +59,17 @@
         </div>
         <div id="price-block" class="hidden">
             <p id="price-title">Efectuati o estimare de pret !</p>
-    <input type="text" id="price-input" placeholder="Setează preț" inputmode="decimal" pattern="[0-9]+([.,][0-9]+)?">            <p id="price-result"></p>
-
+            <input type="text" id="price-input" placeholder="Setează preț" inputmode="decimal" pattern="[0-9]+([.,][0-9]+)?"> 
+            <p id="price-result"></p>
         </div>
+
+        
     </div>
 
+    <footer id="footer">
+        <p>Copyright &copy; 2025 Designed & Developed by Ioan Nemes</p>
+        <p> Built with passion and dedication | Open-source project | Contributions may be accepted in the future!</p>
+    </footer>
 
 
     <script src="script.js"></script>
