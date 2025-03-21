@@ -48,6 +48,22 @@ const areaFormulas = {
     Triangle: (base, height) => 0.5 * base * height,
     Circle: (radius) => Math.PI * radius ** 2,
     Trapezoid: (sideA, sideB, height) => 0.5 * (sideA + sideB) * height,
+    FrustumOfConeLateral: (radius1, radius2, slantHeight) => 
+        Math.PI * (radius1 + radius2) * slantHeight,
+    ConeLateral: (radius, slantHeight) => 
+        Math.PI * radius * slantHeight,
+    PyramidRoof: (base, slantHeight) => 4 * (base * slantHeight / 2),
+    HipRoof: (length, width, height) => {
+    let slope = Math.sqrt((width / 2) ** 2 + height ** 2);
+    let triangleArea = (width * height) / 2;
+    let rectangleArea = length * slope;
+    return 2 * rectangleArea + 2 * triangleArea;
+    },
+    GableRoof: (length, width, height) => {
+    let slope = Math.sqrt((width / 2) ** 2 + height ** 2);
+    return 2 * (length * slope);
+},
+
 };
 
 // Obiect cu numărul de inputuri necesare pentru fiecare formă
@@ -55,7 +71,13 @@ const shapeInputs = {
     Rectangle: ["Lungime", "Lățime"],
     Triangle: ["Bază", "Înălțime"],
     Circle: ["Rază"],
-    Trapezoid: ["Latura mică", "Latura mare", "Înălțime"]
+    Trapezoid: ["Latura mică", "Latura mare", "Înălțime"],
+    FrustumOfConeLateral: ["Raza mică", "Raza mare", "Înălțime panta"],
+    ConeLateral: ["Raza", "Înălțime panta"],
+    PyramidRoof: ["Baza", "Înălțime panta"],
+    HipRoof: ["Lungime", "Lățime", "Înălțime Creasta"],
+    GableRoof:["Lungime", "Lățime","Înălțime Creasta"]
+
 };
 
 // Butoane pentru utilizator
@@ -193,6 +215,16 @@ function updateTotalArea(area, shape) {
         currentLabel="circulara"
     }else if (shape === "Trapezoid") {
         currentLabel="trapezoidala"
+    }else if (shape === "FrustumOfConeLateral") {
+        currentLabel="trunchi de con"
+    }else if (shape === "ConeLateral") {
+        currentLabel="Con"
+    }else if (shape === "PyramidRoof") {
+        currentLabel="4 Ape triunghiulare"
+    }else if (shape === "HipRoof") {
+        currentLabel="pavilion 2Trapez/2Triungh"
+    }else if (shape === "GableRoof") {
+        currentLabel="Frontoane 2Dreptungh/2Triungh"
     }
 
     log(`Current form selected: is ${currentLabel}`);
